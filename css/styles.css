@@ -1101,6 +1101,175 @@ body.sidebar-is-collapsed .sidebar-toggle {
   }
 }
 
+
+/* =========================================================
+   PANTALLAS VERTICALES GRANDES / MODO KIOSCO
+   Optimizado para pantallas como 1080 x 1920 px
+========================================================= */
+@media (orientation: portrait) and (min-height: 800px) {
+  html,
+  body {
+    width: 100%;
+    min-height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  .main-content {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding:
+      max(10px, env(safe-area-inset-top))
+      max(10px, env(safe-area-inset-right))
+      max(10px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wheel-panel {
+    width: min(100%, 1040px);
+    min-height: calc(100dvh - 20px);
+    padding:
+      clamp(22px, 2.6vh, 46px)
+      clamp(12px, 2.8vw, 32px);
+    justify-content: center;
+    border-radius: clamp(20px, 2.6vw, 38px);
+  }
+
+  .stage-actions {
+    top: clamp(16px, 2vh, 28px);
+    right: clamp(16px, 2vw, 28px);
+    gap: clamp(8px, 1.2vw, 14px);
+  }
+
+  .round-action {
+    width: clamp(48px, 5.2vw, 64px);
+    height: clamp(48px, 5.2vw, 64px);
+    font-size: clamp(1rem, 2vw, 1.35rem);
+  }
+
+  .sidebar-toggle {
+    top: max(18px, env(safe-area-inset-top));
+    width: clamp(48px, 5.2vw, 64px);
+    height: clamp(48px, 5.2vw, 64px);
+    font-size: clamp(1rem, 2vw, 1.35rem);
+  }
+
+  .wheel-heading {
+    width: min(100%, 860px);
+    margin: 0;
+    padding-inline: clamp(58px, 9vw, 112px);
+  }
+
+  .wheel-heading .section-kicker {
+    margin-bottom: clamp(4px, 0.6vh, 10px);
+    font-size: clamp(0.8rem, 1.65vw, 1.08rem);
+  }
+
+  .wheel-heading h2 {
+    font-size: clamp(2rem, 4.6vw, 4rem);
+    line-height: 1.04;
+  }
+
+  .wheel-heading > p:last-child {
+    margin-top: clamp(8px, 1vh, 14px);
+    font-size: clamp(1rem, 2vw, 1.4rem);
+  }
+
+  .wheel-stage {
+    width: 100%;
+    padding-top: clamp(42px, 4.7vh, 72px);
+  }
+
+  .wheel-shell {
+    width: min(92vw, 940px, 62dvh);
+    min-width: 0;
+    max-width: none;
+    flex: 0 0 auto;
+  }
+
+  .wheel-rotator,
+  .wheel-image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .wheel-image {
+    object-fit: contain;
+    image-rendering: auto;
+  }
+
+  .wheel-center {
+    width: 40.5%;
+  }
+
+  .center-spin-button {
+    width: 35%;
+  }
+
+  .wheel-pointer {
+    top: -5%;
+    width: 15%;
+  }
+
+  .result-strip {
+    width: min(88vw, 860px);
+    margin-top: clamp(16px, 2vh, 30px);
+    padding:
+      clamp(15px, 1.8vh, 24px)
+      clamp(18px, 2.4vw, 30px);
+    border-radius: clamp(16px, 2vw, 22px);
+  }
+
+  .result-label {
+    font-size: clamp(0.76rem, 1.45vw, 1rem);
+  }
+
+  .result-strip strong {
+    font-size: clamp(1.08rem, 2.5vw, 1.75rem);
+    line-height: 1.22;
+  }
+
+  .mobile-spin-button {
+    display: inline-flex;
+    width: min(82vw, 760px);
+    min-height: clamp(60px, 6.2vh, 86px);
+    margin-top: clamp(14px, 1.8vh, 26px);
+    border-radius: clamp(15px, 2vw, 22px);
+    font-size: clamp(1.05rem, 2.4vw, 1.55rem);
+  }
+}
+
+/* Ajuste extra para pantallas verticales muy altas */
+@media (orientation: portrait) and (min-height: 1200px) {
+  .wheel-panel {
+    min-height: calc(100dvh - 24px);
+  }
+
+  .wheel-shell {
+    width: min(94vw, 980px, 64dvh);
+  }
+
+  .wheel-heading h2 {
+    font-size: clamp(2.5rem, 5vw, 4.4rem);
+  }
+
+  .result-strip {
+    width: min(90vw, 900px);
+  }
+
+  .mobile-spin-button {
+    width: min(84vw, 800px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
