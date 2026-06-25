@@ -40,12 +40,30 @@ body {
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 78% 18%, rgba(255, 196, 0, 0.18), transparent 23rem),
-    radial-gradient(circle at 70% 78%, rgba(0, 168, 107, 0.16), transparent 28rem),
-    linear-gradient(135deg, #edf6ff 0%, #f8fbff 52%, #eef8f5 100%);
+    radial-gradient(
+      circle at 78% 18%,
+      rgba(255, 196, 0, 0.18),
+      transparent 23rem
+    ),
+    radial-gradient(
+      circle at 70% 78%,
+      rgba(0, 168, 107, 0.16),
+      transparent 28rem
+    ),
+    linear-gradient(
+      135deg,
+      #edf6ff 0%,
+      #f8fbff 52%,
+      #eef8f5 100%
+    );
   color: var(--ink);
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
 }
 
@@ -83,6 +101,10 @@ img {
   user-select: none;
 }
 
+/* =========================================================
+   ESTRUCTURA GENERAL
+========================================================= */
+
 .app {
   min-height: 100vh;
   min-height: 100dvh;
@@ -90,6 +112,10 @@ img {
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
   transition: grid-template-columns 320ms ease;
 }
+
+/* =========================================================
+   PANEL LATERAL
+========================================================= */
 
 .sidebar {
   position: relative;
@@ -159,6 +185,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   transition: opacity 240ms ease;
 }
 
+/* =========================================================
+   MARCA
+========================================================= */
+
 .brand {
   display: grid;
   grid-template-columns: 74px minmax(0, 1fr);
@@ -202,6 +232,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   font-size: 0.84rem;
 }
 
+/* =========================================================
+   TARJETAS LATERALES
+========================================================= */
+
 .control-card,
 .history-card {
   border: 1px solid var(--line);
@@ -223,6 +257,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   font-size: 1.14rem;
 }
 
+/* =========================================================
+   BOTONES
+========================================================= */
+
 .primary-button,
 .mobile-spin-button,
 .winner-primary {
@@ -233,7 +271,12 @@ body.sidebar-is-collapsed .sidebar-toggle {
   justify-content: center;
   gap: 10px;
   border-radius: 14px;
-  background: linear-gradient(135deg, var(--blue-800), var(--blue-950));
+  background:
+    linear-gradient(
+      135deg,
+      var(--blue-800),
+      var(--blue-950)
+    );
   color: var(--white);
   font-weight: 900;
   letter-spacing: 0.02em;
@@ -296,6 +339,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   line-height: 1.45;
 }
 
+/* =========================================================
+   HISTORIAL
+========================================================= */
+
 .history-card {
   margin-top: 16px;
   padding: 18px;
@@ -348,6 +395,7 @@ body.sidebar-is-collapsed .sidebar-toggle {
 }
 
 .history-list {
+  max-height: min(300px, 32vh);
   max-height: min(300px, 32dvh);
   margin: 0;
   padding: 0;
@@ -407,6 +455,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   text-align: center;
 }
 
+/* =========================================================
+   CONTENIDO PRINCIPAL
+========================================================= */
+
 .main-content {
   position: relative;
   min-width: 0;
@@ -429,10 +481,18 @@ body.sidebar-is-collapsed .sidebar-toggle {
   border: 1px solid rgba(255, 255, 255, 0.82);
   border-radius: var(--radius-lg);
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(235, 245, 255, 0.78));
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.92),
+      rgba(235, 245, 255, 0.78)
+    );
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(18px);
 }
+
+/* =========================================================
+   ACCIONES SUPERIORES
+========================================================= */
 
 .stage-actions {
   position: absolute;
@@ -450,6 +510,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   box-shadow: 0 10px 26px rgba(0, 55, 144, 0.14);
   backdrop-filter: blur(10px);
 }
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
 
 .wheel-heading {
   position: relative;
@@ -473,6 +537,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   color: var(--muted);
 }
 
+/* =========================================================
+   ZONA DE LA RULETA
+========================================================= */
+
 .wheel-stage {
   width: 100%;
   display: grid;
@@ -482,11 +550,17 @@ body.sidebar-is-collapsed .sidebar-toggle {
 
 .wheel-shell {
   position: relative;
+
+  /* Compatibilidad con navegadores antiguos */
+  width: min(720px, 100%, calc(100vh - 265px));
   width: min(720px, 100%, calc(100dvh - 265px));
+
   min-width: 280px;
   aspect-ratio: 1;
   isolation: isolate;
-  filter: drop-shadow(0 24px 28px rgba(0, 45, 119, 0.21));
+  filter: drop-shadow(
+    0 24px 28px rgba(0, 45, 119, 0.21)
+  );
 }
 
 .wheel-rotator,
@@ -514,7 +588,9 @@ body.sidebar-is-collapsed .sidebar-toggle {
   width: 41%;
   height: auto;
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 10px 18px rgba(0, 31, 104, 0.24));
+  filter: drop-shadow(
+    0 10px 18px rgba(0, 31, 104, 0.24)
+  );
   pointer-events: none;
 }
 
@@ -560,9 +636,15 @@ body.sidebar-is-collapsed .sidebar-toggle {
   height: auto;
   transform: translateX(-50%);
   transform-origin: 50% 20%;
-  filter: drop-shadow(0 10px 10px rgba(104, 61, 0, 0.27));
+  filter: drop-shadow(
+    0 10px 10px rgba(104, 61, 0, 0.27)
+  );
   pointer-events: none;
 }
+
+/* =========================================================
+   BOMBILLOS
+========================================================= */
 
 .bulb-ring {
   position: absolute;
@@ -578,7 +660,13 @@ body.sidebar-is-collapsed .sidebar-toggle {
   aspect-ratio: 1;
   border: 1px solid rgba(255, 255, 255, 0.86);
   border-radius: 50%;
-  background: radial-gradient(circle at 36% 34%, #ffffff 0 34%, #fff7bc 52%, #ffd53d 100%);
+  background:
+    radial-gradient(
+      circle at 36% 34%,
+      #ffffff 0 34%,
+      #fff7bc 52%,
+      #ffd53d 100%
+    );
   box-shadow:
     0 0 6px rgba(255, 255, 255, 0.9),
     0 0 12px rgba(255, 218, 74, 0.55);
@@ -592,12 +680,26 @@ body.sidebar-is-collapsed .sidebar-toggle {
 }
 
 .wheel-shell.is-spinning .wheel-pointer {
-  animation: pointerBounce 120ms ease-in-out infinite alternate;
+  animation:
+    pointerBounce
+    120ms
+    ease-in-out
+    infinite
+    alternate;
 }
 
 .wheel-shell.is-spinning .wheel-center {
-  animation: centerGlow 900ms ease-in-out infinite alternate;
+  animation:
+    centerGlow
+    900ms
+    ease-in-out
+    infinite
+    alternate;
 }
+
+/* =========================================================
+   RESULTADO
+========================================================= */
 
 .result-strip {
   width: min(100%, 610px);
@@ -634,6 +736,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   margin-top: 14px;
 }
 
+/* =========================================================
+   MODAL DEL GANADOR
+========================================================= */
+
 .winner-overlay {
   position: fixed;
   inset: 0;
@@ -656,19 +762,33 @@ body.sidebar-is-collapsed .sidebar-toggle {
 .winner-card {
   position: relative;
   width: min(100%, 520px);
+
+  max-height: min(90vh, 720px);
   max-height: min(90dvh, 720px);
+
   overflow: auto;
   padding: 44px 34px 34px;
   border: 2px solid rgba(255, 255, 255, 0.82);
   border-radius: 30px;
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.26), transparent 16rem),
-    linear-gradient(145deg, var(--blue-800), var(--blue-950));
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 255, 0.26),
+      transparent 16rem
+    ),
+    linear-gradient(
+      145deg,
+      var(--blue-800),
+      var(--blue-950)
+    );
   color: var(--white);
   box-shadow: 0 34px 90px rgba(0, 14, 58, 0.42);
   text-align: center;
   transform: translateY(24px) scale(0.92);
-  transition: transform 360ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  transition:
+    transform
+    360ms
+    cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
 .winner-overlay.is-visible .winner-card {
@@ -677,21 +797,45 @@ body.sidebar-is-collapsed .sidebar-toggle {
 
 .winner-card[data-tone="green"] {
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.25), transparent 16rem),
-    linear-gradient(145deg, #11b779, #007d50);
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 255, 0.25),
+      transparent 16rem
+    ),
+    linear-gradient(
+      145deg,
+      #11b779,
+      #007d50
+    );
 }
 
 .winner-card[data-tone="yellow"] {
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.45), transparent 16rem),
-    linear-gradient(145deg, #ffd642, #f2a900);
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 255, 0.45),
+      transparent 16rem
+    ),
+    linear-gradient(
+      145deg,
+      #ffd642,
+      #f2a900
+    );
   color: #17233e;
 }
 
 .winner-card[data-tone="white"] {
   background:
-    radial-gradient(circle at 50% 0%, rgba(0, 168, 107, 0.12), transparent 16rem),
-    linear-gradient(145deg, #ffffff, #edf4fb);
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(0, 168, 107, 0.12),
+      transparent 16rem
+    ),
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #edf4fb
+    );
   color: var(--blue-950);
 }
 
@@ -787,6 +931,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   background: rgba(0, 55, 144, 0.08);
 }
 
+/* =========================================================
+   CONFETI Y MENSAJES
+========================================================= */
+
 .confetti-canvas {
   position: fixed;
   inset: 0;
@@ -821,6 +969,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* =========================================================
+   ANIMACIONES
+========================================================= */
 
 @keyframes bulbIdle {
   0%,
@@ -864,13 +1016,20 @@ body.sidebar-is-collapsed .sidebar-toggle {
 
 @keyframes centerGlow {
   from {
-    filter: drop-shadow(0 10px 18px rgba(0, 31, 104, 0.24));
+    filter:
+      drop-shadow(
+        0 10px 18px rgba(0, 31, 104, 0.24)
+      );
   }
 
   to {
     filter:
-      drop-shadow(0 10px 18px rgba(0, 31, 104, 0.24))
-      drop-shadow(0 0 18px rgba(255, 196, 0, 0.34));
+      drop-shadow(
+        0 10px 18px rgba(0, 31, 104, 0.24)
+      )
+      drop-shadow(
+        0 0 18px rgba(255, 196, 0, 0.34)
+      );
   }
 }
 
@@ -885,15 +1044,24 @@ body.sidebar-is-collapsed .sidebar-toggle {
   }
 }
 
+/* =========================================================
+   TABLET Y PANTALLAS MEDIANAS
+========================================================= */
+
 @media (max-width: 1100px) {
   :root {
     --sidebar-width: 320px;
   }
 
   .wheel-shell {
+    width: min(680px, 100%, calc(100vh - 255px));
     width: min(680px, 100%, calc(100dvh - 255px));
   }
 }
+
+/* =========================================================
+   MÓVILES
+========================================================= */
 
 @media (max-width: 820px) {
   .app,
@@ -905,7 +1073,11 @@ body.sidebar-is-collapsed .sidebar-toggle {
     position: fixed;
     inset: 0 auto 0 0;
     width: min(88vw, 360px);
-    padding-top: max(78px, calc(env(safe-area-inset-top) + 68px));
+    padding-top:
+      max(
+        78px,
+        calc(env(safe-area-inset-top) + 68px)
+      );
     transform: translateX(0);
   }
 
@@ -932,7 +1104,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
 
   .main-content {
     padding:
-      max(76px, calc(env(safe-area-inset-top) + 66px))
+      max(
+        76px,
+        calc(env(safe-area-inset-top) + 66px)
+      )
       14px
       max(18px, env(safe-area-inset-bottom));
   }
@@ -956,7 +1131,20 @@ body.sidebar-is-collapsed .sidebar-toggle {
   }
 
   .wheel-shell {
-    width: min(620px, calc(100vw - 44px), calc(100dvh - 260px));
+    width:
+      min(
+        620px,
+        calc(100vw - 44px),
+        calc(100vh - 260px)
+      );
+
+    width:
+      min(
+        620px,
+        calc(100vw - 44px),
+        calc(100dvh - 260px)
+      );
+
     min-width: 260px;
   }
 
@@ -1006,7 +1194,20 @@ body.sidebar-is-collapsed .sidebar-toggle {
   }
 
   .wheel-shell {
-    width: min(calc(100vw - 26px), calc(100dvh - 245px), 560px);
+    width:
+      min(
+        calc(100vw - 26px),
+        calc(100vh - 245px),
+        560px
+      );
+
+    width:
+      min(
+        calc(100vw - 26px),
+        calc(100dvh - 245px),
+        560px
+      );
+
     min-width: 250px;
   }
 
@@ -1057,6 +1258,10 @@ body.sidebar-is-collapsed .sidebar-toggle {
   }
 }
 
+/* =========================================================
+   MÓVIL HORIZONTAL
+========================================================= */
+
 @media (max-height: 680px) and (orientation: landscape) {
   .main-content {
     padding-block: 10px;
@@ -1081,6 +1286,7 @@ body.sidebar-is-collapsed .sidebar-toggle {
   }
 
   .wheel-shell {
+    width: min(64vh, 56vw, 500px);
     width: min(64dvh, 56vw, 500px);
     min-width: 230px;
   }
@@ -1101,97 +1307,154 @@ body.sidebar-is-collapsed .sidebar-toggle {
   }
 }
 
-
 /* =========================================================
-   PANTALLAS VERTICALES GRANDES / MODO KIOSCO
-   Optimizado para pantallas como 1080 x 1920 px
+   MODO KIOSCO VERTICAL
+   Para pantallas grandes como 1080 × 1920
 ========================================================= */
-@media (orientation: portrait) and (min-height: 800px) {
-  html,
-  body {
-    width: 100%;
-    min-height: 100%;
+
+@media screen
+  and (orientation: portrait)
+  and (min-width: 700px)
+  and (min-height: 1000px) {
+
+  /*
+    El panel lateral se convierte en un menú flotante.
+    Así la ruleta siempre aprovecha todo el ancho.
+  */
+
+  .app,
+  .app.sidebar-collapsed {
+    grid-template-columns: 1fr;
   }
 
-  body {
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow-x: hidden;
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(80vw, 420px);
+    padding-top: 92px;
+    opacity: 1;
+    transform: translateX(0);
   }
+
+  .app.sidebar-collapsed .sidebar {
+    width: min(80vw, 420px);
+    padding-inline: 22px;
+    opacity: 1;
+    pointer-events: none;
+    transform: translateX(-105%);
+  }
+
+  .sidebar-toggle,
+  body.sidebar-is-collapsed .sidebar-toggle {
+    top: 24px;
+    left: 22px;
+    width: 58px;
+    height: 58px;
+    font-size: 1.25rem;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+  }
+
+  body.mobile-menu-open .sidebar-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /*
+    Contenedor general.
+  */
 
   .main-content {
     width: 100%;
     min-height: 100vh;
-    min-height: 100dvh;
-    padding:
-      max(10px, env(safe-area-inset-top))
-      max(10px, env(safe-area-inset-right))
-      max(10px, env(safe-area-inset-bottom))
-      max(10px, env(safe-area-inset-left));
+    padding: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
+  /*
+    Tarjeta principal casi a pantalla completa.
+  */
+
   .wheel-panel {
-    width: min(100%, 1040px);
-    min-height: calc(100dvh - 20px);
-    padding:
-      clamp(22px, 2.6vh, 46px)
-      clamp(12px, 2.8vw, 32px);
+    width: 96vw;
+    max-width: 1040px;
+    min-height: calc(100vh - 36px);
+    padding: 34px 22px 38px;
     justify-content: center;
-    border-radius: clamp(20px, 2.6vw, 38px);
+    border-radius: 32px;
   }
 
+  /*
+    Botones de sonido y pantalla completa.
+  */
+
   .stage-actions {
-    top: clamp(16px, 2vh, 28px);
-    right: clamp(16px, 2vw, 28px);
-    gap: clamp(8px, 1.2vw, 14px);
+    top: 24px;
+    right: 24px;
+    gap: 12px;
   }
 
   .round-action {
-    width: clamp(48px, 5.2vw, 64px);
-    height: clamp(48px, 5.2vw, 64px);
-    font-size: clamp(1rem, 2vw, 1.35rem);
+    width: 58px;
+    height: 58px;
+    font-size: 1.25rem;
   }
 
-  .sidebar-toggle {
-    top: max(18px, env(safe-area-inset-top));
-    width: clamp(48px, 5.2vw, 64px);
-    height: clamp(48px, 5.2vw, 64px);
-    font-size: clamp(1rem, 2vw, 1.35rem);
-  }
+  /*
+    Encabezado grande.
+  */
 
   .wheel-heading {
-    width: min(100%, 860px);
+    width: 100%;
+    max-width: 860px;
     margin: 0;
-    padding-inline: clamp(58px, 9vw, 112px);
+    padding-inline: 100px;
   }
 
   .wheel-heading .section-kicker {
-    margin-bottom: clamp(4px, 0.6vh, 10px);
-    font-size: clamp(0.8rem, 1.65vw, 1.08rem);
+    margin-bottom: 7px;
+    font-size: 1rem;
   }
 
   .wheel-heading h2 {
-    font-size: clamp(2rem, 4.6vw, 4rem);
+    font-size: 3.15rem;
     line-height: 1.04;
   }
 
   .wheel-heading > p:last-child {
-    margin-top: clamp(8px, 1vh, 14px);
-    font-size: clamp(1rem, 2vw, 1.4rem);
+    display: block;
+    margin-top: 12px;
+    font-size: 1.3rem;
   }
+
+  /*
+    Espacio para la flecha.
+  */
 
   .wheel-stage {
     width: 100%;
-    padding-top: clamp(42px, 4.7vh, 72px);
+    padding-top: 70px;
   }
 
+  /*
+    Tamaño fijo proporcional al ancho.
+    No depende de dvh ni de cálculos que puedan fallar
+    en el navegador de la pantalla táctil.
+  */
+
   .wheel-shell {
-    width: min(92vw, 940px, 62dvh);
-    min-width: 0;
-    max-width: none;
+    width: 86vw !important;
+    height: 86vw !important;
+
+    max-width: 900px !important;
+    max-height: 900px !important;
+
+    min-width: 0 !important;
+
     flex: 0 0 auto;
   }
 
@@ -1206,12 +1469,16 @@ body.sidebar-is-collapsed .sidebar-toggle {
     image-rendering: auto;
   }
 
+  /*
+    Centro y flecha.
+  */
+
   .wheel-center {
     width: 40.5%;
   }
 
   .center-spin-button {
-    width: 35%;
+    width: 36%;
   }
 
   .wheel-pointer {
@@ -1219,56 +1486,71 @@ body.sidebar-is-collapsed .sidebar-toggle {
     width: 15%;
   }
 
+  /*
+    Último resultado.
+  */
+
   .result-strip {
-    width: min(88vw, 860px);
-    margin-top: clamp(16px, 2vh, 30px);
-    padding:
-      clamp(15px, 1.8vh, 24px)
-      clamp(18px, 2.4vw, 30px);
-    border-radius: clamp(16px, 2vw, 22px);
+    width: 84vw;
+    max-width: 820px;
+    margin-top: 24px;
+    padding: 20px 26px;
+    border-radius: 20px;
   }
 
   .result-label {
-    font-size: clamp(0.76rem, 1.45vw, 1rem);
+    font-size: 0.95rem;
   }
 
   .result-strip strong {
-    font-size: clamp(1.08rem, 2.5vw, 1.75rem);
-    line-height: 1.22;
+    font-size: 1.5rem;
+    line-height: 1.25;
   }
 
+  /*
+    Botón táctil grande.
+  */
+
   .mobile-spin-button {
-    display: inline-flex;
-    width: min(82vw, 760px);
-    min-height: clamp(60px, 6.2vh, 86px);
-    margin-top: clamp(14px, 1.8vh, 26px);
-    border-radius: clamp(15px, 2vw, 22px);
-    font-size: clamp(1.05rem, 2.4vw, 1.55rem);
+    display: inline-flex !important;
+
+    width: 78vw;
+    max-width: 740px;
+    min-height: 76px;
+
+    margin-top: 20px;
+
+    border-radius: 18px;
+    font-size: 1.4rem;
+  }
+
+  /*
+    Modal más grande para la pantalla final.
+  */
+
+  .winner-card {
+    width: min(86vw, 660px);
+    padding: 58px 42px 42px;
+  }
+
+  .winner-card h2 {
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+  }
+
+  .winner-description {
+    font-size: 1.2rem;
+  }
+
+  .winner-primary,
+  .winner-secondary {
+    min-height: 64px;
+    font-size: 1.1rem;
   }
 }
 
-/* Ajuste extra para pantallas verticales muy altas */
-@media (orientation: portrait) and (min-height: 1200px) {
-  .wheel-panel {
-    min-height: calc(100dvh - 24px);
-  }
-
-  .wheel-shell {
-    width: min(94vw, 980px, 64dvh);
-  }
-
-  .wheel-heading h2 {
-    font-size: clamp(2.5rem, 5vw, 4.4rem);
-  }
-
-  .result-strip {
-    width: min(90vw, 900px);
-  }
-
-  .mobile-spin-button {
-    width: min(84vw, 800px);
-  }
-}
+/* =========================================================
+   PREFERENCIA DE MOVIMIENTO REDUCIDO
+========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   *,
