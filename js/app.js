@@ -424,11 +424,17 @@ function spinWheel() {
   const alignmentDelta = normalizeAngle(
     targetNormalizedRotation - currentNormalizedRotation
   );
-  const fullTurns = (6 + Math.floor(secureRandom() * 3)) * 360;
+  /*
+    Giro extendido para aumentar la expectativa:
+    - Entre 7 y 9 vueltas completas.
+    - Duración aproximada entre 9,2 y 10,5 segundos.
+    - Se mantiene la misma salida firme y desaceleración suave.
+  */
+  const fullTurns = (7 + Math.floor(secureRandom() * 3)) * 360;
   const targetRotation = currentRotation + fullTurns + alignmentDelta;
   const duration = prefersReducedMotion
     ? 1200
-    : 6900 + secureRandom() * 1100;
+    : 9200 + secureRandom() * 1300;
 
   animateWheel(currentRotation, targetRotation, duration, selectedSector);
 }
