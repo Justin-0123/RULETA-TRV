@@ -87,173 +87,179 @@ const mobileQuery = window.matchMedia("(max-width: 820px)");
    CONFIGURACIÓN Y PREMIOS
 ========================================================= */
 const STORAGE_KEYS = {
-  history: "feria85-wheel-history",
+  // Nueva clave para no mezclar el historial de la ruleta anterior.
+  history: "feria85-wheel-history-2026",
   sound: "feria85-wheel-sound",
   sidebar: "feria85-wheel-sidebar"
 };
 
 /*
-  0° corresponde a la parte superior de la imagen.
-  Los grados aumentan en sentido horario.
+  La nueva ruleta tiene 20 sectores iguales.
+
+  - 0° corresponde al centro del sector situado arriba,
+    justo debajo de la flecha.
+  - Los grados aumentan en sentido horario.
+  - Cada sector mide 18°.
+  - El primer sector ocupa desde 351° hasta 9°.
 */
 const sectors = [
   {
-    id: "mac",
-    label: "Maquillaje Express MAC",
-    start: 349.5,
-    end: 10,
+    id: "clinique-makeup",
+    label: "Maquillaje Express Clinique",
+    start: 351,
+    end: 9,
     tone: "white",
-    detail: "Has obtenido una experiencia de maquillaje Express MAC."
+    detail: "Has obtenido una experiencia de maquillaje Express Clinique."
   },
   {
     id: "surprise-green-top",
     label: "Premio sorpresa",
-    start: 10,
-    end: 27.5,
+    start: 9,
+    end: 27,
     tone: "green",
     detail: "Consulta el premio sorpresa asignado."
   },
   {
-    id: "estee-lauder",
+    id: "estee-lauder-cleaning",
     label: "Limpieza Facial Express Estée Lauder",
-    start: 27.5,
-    end: 47.25,
+    start: 27,
+    end: 45,
     tone: "yellow",
     detail: "Has obtenido una experiencia de limpieza facial Express Estée Lauder."
   },
   {
-    id: "surprise-blue-right-top",
+    id: "surprise-blue-upper-right",
     label: "Premio sorpresa",
-    start: 47.25,
-    end: 65.75,
+    start: 45,
+    end: 63,
     tone: "blue",
     detail: "Consulta el premio sorpresa asignado."
   },
   {
-    id: "palladio",
+    id: "palladio-makeup",
     label: "Maquillaje Express Palladio",
-    start: 65.75,
-    end: 81.25,
+    start: 63,
+    end: 81,
     tone: "white",
     detail: "Has obtenido una experiencia de maquillaje Express Palladio."
   },
   {
     id: "surprise-green-right",
     label: "Premio sorpresa",
-    start: 81.25,
-    end: 97.25,
+    start: 81,
+    end: 99,
     tone: "green",
     detail: "Consulta el premio sorpresa asignado."
   },
   {
-    id: "clinique-yellow",
+    id: "surprise-orange-right",
+    label: "Premio sorpresa",
+    start: 99,
+    end: 117,
+    tone: "yellow",
+    detail: "Consulta el premio sorpresa asignado."
+  },
+  {
+    id: "clinique-cleaning-lower-right",
     label: "Limpieza Facial Express Clinique",
-    start: 97.25,
-    end: 122,
+    start: 117,
+    end: 135,
     tone: "yellow",
     detail: "Has obtenido una experiencia de limpieza facial Express Clinique."
   },
   {
     id: "surprise-blue-lower-right",
     label: "Premio sorpresa",
-    start: 122,
-    end: 137.25,
+    start: 135,
+    end: 153,
     tone: "blue",
     detail: "Consulta el premio sorpresa asignado."
   },
   {
-    id: "maybelline",
-    label: "Maquillaje Express Maybelline New York",
-    start: 137.25,
-    end: 157.5,
-    tone: "white",
-    detail: "Has obtenido una experiencia de maquillaje Express Maybelline New York."
-  },
-  {
-    id: "surprise-green-bottom-right",
+    id: "surprise-orange-bottom-right",
     label: "Premio sorpresa",
-    start: 157.5,
-    end: 170.75,
-    tone: "green",
-    detail: "Consulta el premio sorpresa asignado."
-  },
-  {
-    id: "natasha-denona",
-    label: "Maquillaje Express Natasha Denona",
-    start: 170.75,
-    end: 189.25,
-    tone: "white",
-    detail: "Has obtenido una experiencia de maquillaje Express Natasha Denona."
-  },
-  {
-    id: "surprise-green-bottom-left",
-    label: "Premio sorpresa",
-    start: 189.25,
-    end: 202.5,
-    tone: "green",
-    detail: "Consulta el premio sorpresa asignado."
-  },
-  {
-    id: "surprise-yellow-bottom-left",
-    label: "Premio sorpresa",
-    start: 202.5,
-    end: 217.75,
+    start: 153,
+    end: 171,
     tone: "yellow",
     detail: "Consulta el premio sorpresa asignado."
   },
   {
-    id: "surprise-blue-bottom-left",
-    label: "Premio sorpresa",
-    start: 217.75,
-    end: 233.25,
+    id: "natasha-denona-makeup",
+    label: "Maquillaje Express Natasha Denona",
+    start: 171,
+    end: 189,
+    tone: "white",
+    detail: "Has obtenido una experiencia de maquillaje Express Natasha Denona."
+  },
+  {
+    id: "maybelline-makeup",
+    label: "Maquillaje Express Maybelline New York",
+    start: 189,
+    end: 207,
     tone: "blue",
+    detail: "Has obtenido una experiencia de maquillaje Express Maybelline New York."
+  },
+  {
+    id: "surprise-orange-bottom-left",
+    label: "Premio sorpresa",
+    start: 207,
+    end: 225,
+    tone: "yellow",
     detail: "Consulta el premio sorpresa asignado."
   },
   {
-    id: "loreal",
+    id: "surprise-green-lower-left",
+    label: "Premio sorpresa",
+    start: 225,
+    end: 243,
+    tone: "green",
+    detail: "Consulta el premio sorpresa asignado."
+  },
+  {
+    id: "loreal-makeup",
     label: "Maquillaje Express L'Oréal Paris",
-    start: 233.25,
-    end: 263.5,
+    start: 243,
+    end: 261,
     tone: "white",
     detail: "Has obtenido una experiencia de maquillaje Express L'Oréal Paris."
   },
   {
     id: "surprise-yellow-left",
     label: "Premio sorpresa",
-    start: 263.5,
-    end: 278.75,
+    start: 261,
+    end: 279,
     tone: "yellow",
     detail: "Consulta el premio sorpresa asignado."
   },
   {
-    id: "surprise-green-left",
+    id: "surprise-orange-left",
     label: "Premio sorpresa",
-    start: 278.75,
-    end: 294.75,
-    tone: "green",
+    start: 279,
+    end: 297,
+    tone: "yellow",
     detail: "Consulta el premio sorpresa asignado."
   },
   {
-    id: "clinique-white",
+    id: "clinique-cleaning-upper-left",
     label: "Limpieza Facial Express Clinique",
-    start: 294.75,
-    end: 314.5,
-    tone: "white",
+    start: 297,
+    end: 315,
+    tone: "green",
     detail: "Has obtenido una experiencia de limpieza facial Express Clinique."
   },
   {
-    id: "surprise-yellow-upper-left",
+    id: "surprise-orange-upper-left",
     label: "Premio sorpresa",
-    start: 314.5,
-    end: 332.5,
+    start: 315,
+    end: 333,
     tone: "yellow",
     detail: "Consulta el premio sorpresa asignado."
   },
   {
-    id: "surprise-blue-upper-left",
+    id: "surprise-blue-top-left",
     label: "Premio sorpresa",
-    start: 332.5,
-    end: 349.5,
+    start: 333,
+    end: 351,
     tone: "blue",
     detail: "Consulta el premio sorpresa asignado."
   }
@@ -270,6 +276,8 @@ let audioContext = null;
 let confettiAnimationId = null;
 let toastTimer = null;
 let winnerCloseTimer = null;
+let activeSpinAnimation = null;
+let activeTickTimer = null;
 
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
@@ -425,6 +433,148 @@ function spinWheel() {
   animateWheel(currentRotation, targetRotation, duration, selectedSector);
 }
 
+function clearActiveSpinAnimation() {
+  if (activeSpinAnimation) {
+    activeSpinAnimation.onfinish = null;
+    activeSpinAnimation.oncancel = null;
+    activeSpinAnimation.cancel();
+    activeSpinAnimation = null;
+  }
+}
+
+function stopTickSequence() {
+  if (activeTickTimer) {
+    window.clearTimeout(activeTickTimer);
+    activeTickTimer = null;
+  }
+}
+
+/*
+  Genera el sonido mecánico de la flecha sin calcular la rotación
+  en cada fotograma. Al principio los clics son más frecuentes y,
+  conforme la ruleta desacelera, se van separando progresivamente.
+*/
+function startTickSequence(duration) {
+  stopTickSequence();
+
+  if (!soundEnabled || prefersReducedMotion) {
+    return;
+  }
+
+  const startTime = performance.now();
+
+  function scheduleNextTick() {
+    if (!isSpinning) {
+      stopTickSequence();
+      return;
+    }
+
+    const elapsed = performance.now() - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    if (progress >= 0.965) {
+      stopTickSequence();
+      return;
+    }
+
+    playTickSound(Math.max(0.15, 1 - progress));
+
+    // De 55 ms al inicio hasta aproximadamente 285 ms al final.
+    const nextDelay = 55 + Math.pow(progress, 2.35) * 230;
+    activeTickTimer = window.setTimeout(scheduleNextTick, nextDelay);
+  }
+
+  activeTickTimer = window.setTimeout(scheduleNextTick, 70);
+}
+
+function settleWheelAt(targetRotation, expectedSector) {
+  /*
+    Mantener solo el ángulo equivalente entre 0° y 359° evita que
+    el número de grados crezca indefinidamente después de muchos giros.
+  */
+  currentRotation = normalizeAngle(targetRotation);
+  elements.wheelRotator.style.transform =
+    `translateZ(0) rotate(${currentRotation}deg)`;
+
+  clearActiveSpinAnimation();
+  stopTickSequence();
+  finishSpin(expectedSector);
+}
+
+function animateWheelWithWebAnimations(
+  startRotation,
+  targetRotation,
+  duration,
+  expectedSector
+) {
+  clearActiveSpinAnimation();
+
+  const startTransform =
+    `translateZ(0) rotate(${startRotation}deg)`;
+  const endTransform =
+    `translateZ(0) rotate(${targetRotation}deg)`;
+
+  elements.wheelRotator.style.transform = startTransform;
+
+  activeSpinAnimation = elements.wheelRotator.animate(
+    [
+      { transform: startTransform },
+      { transform: endTransform }
+    ],
+    {
+      duration,
+      // Inicio firme y desaceleración larga, sin frenado brusco.
+      easing: "cubic-bezier(0.10, 0.72, 0.12, 1)",
+      fill: "forwards"
+    }
+  );
+
+  activeSpinAnimation.onfinish = () => {
+    settleWheelAt(targetRotation, expectedSector);
+  };
+
+  activeSpinAnimation.oncancel = () => {
+    stopTickSequence();
+  };
+}
+
+/*
+  Respaldo para navegadores antiguos que no soporten Web Animations API.
+  En navegadores modernos no se utiliza este método.
+*/
+function animateWheelWithRequestAnimationFrame(
+  startRotation,
+  targetRotation,
+  duration,
+  expectedSector
+) {
+  const startTime = performance.now();
+
+  function frame(now) {
+    if (!isSpinning) {
+      return;
+    }
+
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const easedProgress = easeOutQuint(progress);
+    const rotation =
+      startRotation + (targetRotation - startRotation) * easedProgress;
+
+    elements.wheelRotator.style.transform =
+      `translateZ(0) rotate(${rotation}deg)`;
+
+    if (progress < 1) {
+      requestAnimationFrame(frame);
+      return;
+    }
+
+    settleWheelAt(targetRotation, expectedSector);
+  }
+
+  requestAnimationFrame(frame);
+}
+
 function animateWheel(startRotation, targetRotation, duration, expectedSector) {
   isSpinning = true;
   setSpinButtonsDisabled(true);
@@ -432,47 +582,30 @@ function animateWheel(startRotation, targetRotation, duration, expectedSector) {
   elements.wheelShell.setAttribute("aria-busy", "true");
   elements.lastResult.textContent = "Girando…";
 
-  const startTime = performance.now();
-  let previousSectorIndex = getSectorAtPointer(startRotation).index;
-  let lastTickTime = 0;
-
   playSpinStartSound();
+  startTickSequence(duration);
 
-  function frame(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const easedProgress = easeOutQuint(progress);
-
-    currentRotation =
-      startRotation + (targetRotation - startRotation) * easedProgress;
-
-    elements.wheelRotator.style.transform = `rotate(${currentRotation}deg)`;
-
-    const pointerResult = getSectorAtPointer(currentRotation);
-
-    if (
-      pointerResult.index !== previousSectorIndex &&
-      now - lastTickTime > 40
-    ) {
-      playTickSound(Math.max(0.15, 1 - progress));
-      previousSectorIndex = pointerResult.index;
-      lastTickTime = now;
-    }
-
-    if (progress < 1) {
-      requestAnimationFrame(frame);
-      return;
-    }
-
-    currentRotation = targetRotation;
-    elements.wheelRotator.style.transform = `rotate(${currentRotation}deg)`;
-    finishSpin(expectedSector);
+  if (typeof elements.wheelRotator.animate === "function") {
+    animateWheelWithWebAnimations(
+      startRotation,
+      targetRotation,
+      duration,
+      expectedSector
+    );
+    return;
   }
 
-  requestAnimationFrame(frame);
+  animateWheelWithRequestAnimationFrame(
+    startRotation,
+    targetRotation,
+    duration,
+    expectedSector
+  );
 }
 
 function finishSpin(expectedSector) {
+  stopTickSequence();
+
   const finalResult = getSectorAtPointer(currentRotation);
   const finalSector = finalResult.sector || expectedSector;
 
@@ -1059,8 +1192,27 @@ document.addEventListener("keydown", handleKeyboard);
 mobileQuery.addEventListener?.("change", handleViewportChange);
 
 /* =========================================================
+   PREPARACIÓN DE RENDIMIENTO
+========================================================= */
+function prepareWheelPerformance() {
+  /*
+    Estas propiedades promueven únicamente la capa giratoria a la GPU.
+    No alteran tamaño, posición, diseño ni comportamiento responsive.
+  */
+  elements.wheelRotator.style.willChange = "transform";
+  elements.wheelRotator.style.backfaceVisibility = "hidden";
+  elements.wheelRotator.style.transformOrigin = "50% 50%";
+  elements.wheelRotator.style.transform =
+    `translateZ(0) rotate(${currentRotation}deg)`;
+
+  elements.wheelImage.style.backfaceVisibility = "hidden";
+  elements.wheelImage.style.transform = "translateZ(0)";
+}
+
+/* =========================================================
    INICIO
 ========================================================= */
+prepareWheelPerformance();
 createBulbs();
 restoreSidebarState();
 restoreSoundPreference();
