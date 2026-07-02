@@ -21,11 +21,6 @@ const elements = {
   toggleSidebarBtn: document.getElementById("toggleSidebarBtn"),
   sidebarToggleIcon: document.getElementById("sidebarToggleIcon"),
 
-  soundBtn: document.getElementById("soundBtn"),
-  soundIcon: document.getElementById("soundIcon"),
-  soundText: document.getElementById("soundText"),
-  quickSoundBtn: document.getElementById("quickSoundBtn"),
-  quickSoundIcon: document.getElementById("quickSoundIcon"),
 
   fullscreenBtn: document.getElementById("fullscreenBtn"),
   fullscreenIcon: document.getElementById("fullscreenIcon"),
@@ -47,7 +42,6 @@ const elements = {
   winnerCloseButton: document.getElementById("winnerCloseButton"),
   spinAgainBtn: document.getElementById("spinAgainBtn"),
 
-  confettiCanvas: document.getElementById("confettiCanvas"),
   toast: document.getElementById("toast")
 };
 
@@ -65,8 +59,7 @@ const requiredElements = [
   "winnerOverlay",
   "winnerCard",
   "winnerTitle",
-  "winnerDescription",
-  "confettiCanvas"
+  "winnerDescription"
 ];
 
 const missingElements = requiredElements.filter((name) => !elements[name]);
@@ -80,7 +73,6 @@ if (missingElements.length > 0) {
   throw new Error("La estructura del HTML no coincide con js/app.js.");
 }
 
-const confettiContext = elements.confettiCanvas.getContext("2d");
 const mobileQuery = window.matchMedia("(max-width: 820px)");
 
 /* =========================================================
@@ -89,7 +81,6 @@ const mobileQuery = window.matchMedia("(max-width: 820px)");
 const STORAGE_KEYS = {
   // Nueva clave para no mezclar el historial de la ruleta anterior.
   history: "feria85-wheel-history-2026",
-  sound: "feria85-wheel-sound",
   sidebar: "feria85-wheel-sidebar"
 };
 
@@ -270,14 +261,10 @@ const sectors = [
 ========================================================= */
 let currentRotation = 0;
 let isSpinning = false;
-let soundEnabled = true;
 let history = [];
-let audioContext = null;
-let confettiAnimationId = null;
 let toastTimer = null;
 let winnerCloseTimer = null;
 let activeSpinAnimation = null;
-let activeTickTimer = null;
 
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
@@ -369,7 +356,7 @@ function easeOutQuint(progress) {
 }
 
 /* =========================================================
-   BOMBILLOS
+   BOMBILLOS ESTÁTICOS
 ========================================================= */
 function createBulbs(total = 24) {
   if (!elements.bulbRing) {
@@ -386,7 +373,6 @@ function createBulbs(total = 24) {
     bulb.className = "bulb";
     bulb.style.left = `${50 + Math.cos(angle) * radius}%`;
     bulb.style.top = `${50 + Math.sin(angle) * radius}%`;
-    bulb.style.animationDelay = `${index * 70}ms`;
 
     elements.bulbRing.appendChild(bulb);
   }
@@ -415,8 +401,6 @@ function spinWheel() {
 
   closeWinner();
   closeSidebarOnMobile();
-  ensureAudioContext();
-
   const selectedSector = chooseWeightedSector();
   const selectedAngle = chooseSafeAngleInsideSector(selectedSector);
   const targetNormalizedRotation = normalizeAngle(360 - selectedAngle);
@@ -448,51 +432,6 @@ function clearActiveSpinAnimation() {
   }
 }
 
-function stopTickSequence() {
-  if (activeTickTimer) {
-    window.clearTimeout(activeTickTimer);
-    activeTickTimer = null;
-  }
-}
-
-/*
-  Genera el sonido mecánico de la flecha sin calcular la rotación
-  en cada fotograma. Al principio los clics son más frecuentes y,
-  conforme la ruleta desacelera, se van separando progresivamente.
-*/
-function startTickSequence(duration) {
-  stopTickSequence();
-
-  if (!soundEnabled || prefersReducedMotion) {
-    return;
-  }
-
-  const startTime = performance.now();
-
-  function scheduleNextTick() {
-    if (!isSpinning) {
-      stopTickSequence();
-      return;
-    }
-
-    const elapsed = performance.now() - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-
-    if (progress >= 0.965) {
-      stopTickSequence();
-      return;
-    }
-
-    playTickSound(Math.max(0.15, 1 - progress));
-
-    // De 55 ms al inicio hasta aproximadamente 285 ms al final.
-    const nextDelay = 55 + Math.pow(progress, 2.35) * 230;
-    activeTickTimer = window.setTimeout(scheduleNextTick, nextDelay);
-  }
-
-  activeTickTimer = window.setTimeout(scheduleNextTick, 70);
-}
-
 function settleWheelAt(targetRotation, expectedSector) {
   /*
     Mantener solo el ángulo equivalente entre 0° y 359° evita que
@@ -503,7 +442,6 @@ function settleWheelAt(targetRotation, expectedSector) {
     `translateZ(0) rotate(${currentRotation}deg)`;
 
   clearActiveSpinAnimation();
-  stopTickSequence();
   finishSpin(expectedSector);
 }
 
@@ -529,7 +467,7 @@ function animateWheelWithWebAnimations(
     ],
     {
       duration,
-      // Inicio firme y desaceleración larga, sin frenado brusco.
+      // Giro principal aislado en una sola capa para mayor fluidez.
       easing: "cubic-bezier(0.10, 0.72, 0.12, 1)",
       fill: "forwards"
     }
@@ -539,9 +477,6 @@ function animateWheelWithWebAnimations(
     settleWheelAt(targetRotation, expectedSector);
   };
 
-  activeSpinAnimation.oncancel = () => {
-    stopTickSequence();
-  };
 }
 
 /*
@@ -588,8 +523,6 @@ function animateWheel(startRotation, targetRotation, duration, expectedSector) {
   elements.wheelShell.setAttribute("aria-busy", "true");
   elements.lastResult.textContent = "Girando…";
 
-  playSpinStartSound();
-  startTickSequence(duration);
 
   if (typeof elements.wheelRotator.animate === "function") {
     animateWheelWithWebAnimations(
@@ -610,7 +543,6 @@ function animateWheel(startRotation, targetRotation, duration, expectedSector) {
 }
 
 function finishSpin(expectedSector) {
-  stopTickSequence();
 
   const finalResult = getSectorAtPointer(currentRotation);
   const finalSector = finalResult.sector || expectedSector;
@@ -622,11 +554,9 @@ function finishSpin(expectedSector) {
   elements.lastResult.textContent = finalSector.label;
 
   addHistoryEntry(finalSector);
-  playWinnerSound();
 
   window.setTimeout(() => {
     showWinner(finalSector);
-    launchConfetti();
   }, prefersReducedMotion ? 50 : 320);
 }
 
@@ -762,7 +692,6 @@ function closeWinner() {
   elements.winnerOverlay.setAttribute("aria-hidden", "true");
   elements.winnerOverlay.inert = true;
   document.body.classList.remove("modal-open");
-  stopConfetti();
 
   window.clearTimeout(winnerCloseTimer);
   winnerCloseTimer = window.setTimeout(() => {
@@ -841,148 +770,6 @@ function handleViewportChange(event) {
 }
 
 /* =========================================================
-   SONIDO
-========================================================= */
-function restoreSoundPreference() {
-  soundEnabled =
-    localStorage.getItem(STORAGE_KEYS.sound) !== "disabled";
-  updateSoundButtons();
-}
-
-function toggleSound() {
-  soundEnabled = !soundEnabled;
-
-  localStorage.setItem(
-    STORAGE_KEYS.sound,
-    soundEnabled ? "enabled" : "disabled"
-  );
-
-  if (soundEnabled) {
-    ensureAudioContext();
-    playToggleSound();
-  }
-
-  updateSoundButtons();
-}
-
-function updateSoundButtons() {
-  const icon = soundEnabled ? "🔊" : "🔇";
-  const text = soundEnabled ? "Sonido activado" : "Sonido desactivado";
-
-  elements.soundIcon.textContent = icon;
-  elements.quickSoundIcon.textContent = icon;
-  elements.soundText.textContent = text;
-  elements.soundBtn.setAttribute("aria-pressed", String(soundEnabled));
-  elements.quickSoundBtn.setAttribute("aria-pressed", String(soundEnabled));
-}
-
-function ensureAudioContext() {
-  if (!soundEnabled) {
-    return null;
-  }
-
-  if (!audioContext) {
-    const AudioContextClass =
-      window.AudioContext || window.webkitAudioContext;
-
-    if (!AudioContextClass) {
-      return null;
-    }
-
-    audioContext = new AudioContextClass();
-  }
-
-  if (audioContext.state === "suspended") {
-    audioContext.resume().catch(() => {});
-  }
-
-  return audioContext;
-}
-
-function playTone({
-  frequency = 440,
-  endFrequency = frequency,
-  duration = 0.08,
-  volume = 0.04,
-  type = "sine",
-  delay = 0
-} = {}) {
-  const context = ensureAudioContext();
-
-  if (!context || !soundEnabled) {
-    return;
-  }
-
-  const start = context.currentTime + delay;
-  const oscillator = context.createOscillator();
-  const gain = context.createGain();
-
-  oscillator.type = type;
-  oscillator.frequency.setValueAtTime(frequency, start);
-  oscillator.frequency.exponentialRampToValueAtTime(
-    Math.max(1, endFrequency),
-    start + duration
-  );
-
-  gain.gain.setValueAtTime(0.0001, start);
-  gain.gain.exponentialRampToValueAtTime(volume, start + 0.012);
-  gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-
-  oscillator.connect(gain);
-  gain.connect(context.destination);
-  oscillator.start(start);
-  oscillator.stop(start + duration + 0.02);
-}
-
-function playTickSound(speedFactor = 1) {
-  playTone({
-    frequency: 620 + speedFactor * 460,
-    endFrequency: 430 + speedFactor * 200,
-    duration: 0.024 + speedFactor * 0.016,
-    volume: 0.015 + speedFactor * 0.018,
-    type: "square"
-  });
-}
-
-function playSpinStartSound() {
-  playTone({
-    frequency: 180,
-    endFrequency: 620,
-    duration: 0.28,
-    volume: 0.055,
-    type: "sawtooth"
-  });
-}
-
-function playWinnerSound() {
-  [
-    { frequency: 523.25, delay: 0 },
-    { frequency: 659.25, delay: 0.12 },
-    { frequency: 783.99, delay: 0.24 },
-    { frequency: 1046.5, delay: 0.39 }
-  ].forEach((note) => {
-    playTone({
-      frequency: note.frequency,
-      endFrequency: note.frequency * 1.01,
-      duration: 0.3,
-      volume: 0.065,
-      type: "sine",
-      delay: note.delay
-    });
-  });
-}
-
-function playToggleSound() {
-  playTone({
-    frequency: 520,
-    endFrequency: 760,
-    duration: 0.12,
-    volume: 0.04,
-    type: "sine"
-  });
-}
-
-/* =========================================================
    PANTALLA COMPLETA
 ========================================================= */
 async function toggleFullscreen() {
@@ -1006,104 +793,6 @@ function updateFullscreenButtons() {
   elements.fullscreenText.textContent = isActive
     ? "Salir de pantalla completa"
     : "Pantalla completa";
-}
-
-/* =========================================================
-   CONFETI
-========================================================= */
-function resizeConfettiCanvas() {
-  const ratio = Math.min(window.devicePixelRatio || 1, 2);
-
-  elements.confettiCanvas.width = Math.floor(window.innerWidth * ratio);
-  elements.confettiCanvas.height = Math.floor(window.innerHeight * ratio);
-  elements.confettiCanvas.style.width = `${window.innerWidth}px`;
-  elements.confettiCanvas.style.height = `${window.innerHeight}px`;
-  confettiContext.setTransform(ratio, 0, 0, ratio, 0, 0);
-}
-
-function launchConfetti() {
-  if (prefersReducedMotion) {
-    return;
-  }
-
-  stopConfetti();
-  resizeConfettiCanvas();
-
-  const colors = [
-    "#003f9f",
-    "#0a5bc0",
-    "#00a86b",
-    "#ffc400",
-    "#ff6418",
-    "#ffffff"
-  ];
-  const totalPieces = mobileQuery.matches ? 85 : 170;
-  const pieces = Array.from({ length: totalPieces }, () => ({
-    x: window.innerWidth * (0.25 + secureRandom() * 0.5),
-    y: -30 - secureRandom() * 180,
-    vx: (secureRandom() - 0.5) * 8,
-    vy: 3 + secureRandom() * 6,
-    gravity: 0.08 + secureRandom() * 0.06,
-    rotation: secureRandom() * Math.PI,
-    rotationSpeed: (secureRandom() - 0.5) * 0.25,
-    width: 6 + secureRandom() * 8,
-    height: 4 + secureRandom() * 7,
-    color: colors[Math.floor(secureRandom() * colors.length)],
-    opacity: 0.85 + secureRandom() * 0.15
-  }));
-
-  const startTime = performance.now();
-
-  function animate(now) {
-    confettiContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-    pieces.forEach((piece) => {
-      piece.vy += piece.gravity;
-      piece.x += piece.vx;
-      piece.y += piece.vy;
-      piece.rotation += piece.rotationSpeed;
-
-      confettiContext.save();
-      confettiContext.translate(piece.x, piece.y);
-      confettiContext.rotate(piece.rotation);
-      confettiContext.globalAlpha = piece.opacity;
-      confettiContext.fillStyle = piece.color;
-      confettiContext.fillRect(
-        -piece.width / 2,
-        -piece.height / 2,
-        piece.width,
-        piece.height
-      );
-      confettiContext.restore();
-    });
-
-    const elapsed = now - startTime;
-    const stillVisible = pieces.some(
-      (piece) => piece.y < window.innerHeight + 70
-    );
-
-    if (elapsed < 4800 && stillVisible) {
-      confettiAnimationId = requestAnimationFrame(animate);
-    } else {
-      stopConfetti();
-    }
-  }
-
-  confettiAnimationId = requestAnimationFrame(animate);
-}
-
-function stopConfetti() {
-  if (confettiAnimationId) {
-    cancelAnimationFrame(confettiAnimationId);
-    confettiAnimationId = null;
-  }
-
-  confettiContext.clearRect(
-    0,
-    0,
-    elements.confettiCanvas.width,
-    elements.confettiCanvas.height
-  );
 }
 
 /* =========================================================
@@ -1177,8 +866,6 @@ elements.sidebarSpinBtn.addEventListener("click", spinWheel);
 elements.mobileSpinBtn.addEventListener("click", spinWheel);
 elements.toggleSidebarBtn?.addEventListener("click", toggleSidebar);
 elements.sidebarBackdrop?.addEventListener("click", closeSidebarOnMobile);
-elements.soundBtn?.addEventListener("click", toggleSound);
-elements.quickSoundBtn?.addEventListener("click", toggleSound);
 elements.fullscreenBtn?.addEventListener("click", toggleFullscreen);
 elements.quickFullscreenBtn?.addEventListener("click", toggleFullscreen);
 document.addEventListener("fullscreenchange", updateFullscreenButtons);
@@ -1193,7 +880,6 @@ elements.winnerOverlay.addEventListener("click", (event) => {
   }
 });
 
-window.addEventListener("resize", resizeConfettiCanvas);
 document.addEventListener("keydown", handleKeyboard);
 mobileQuery.addEventListener?.("change", handleViewportChange);
 
@@ -1221,8 +907,6 @@ function prepareWheelPerformance() {
 prepareWheelPerformance();
 createBulbs();
 restoreSidebarState();
-restoreSoundPreference();
 loadHistory();
 updateFullscreenButtons();
 verifyImages();
-resizeConfettiCanvas();
