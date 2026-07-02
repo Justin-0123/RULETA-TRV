@@ -33,5 +33,14 @@ jobs:
           path: .
 
       - name: Deploy to GitHub Pages
-        id: deployment
+        id: first_deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Wait before retrying deployment
+        if: steps.first_deployment.outcome == 'failure'
+        run: sleep 20
+
+      - name: Retry deployment
+        if: steps.first_deployment.outcome == 'failure'
         uses: actions/deploy-pages@v4
